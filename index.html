@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tradinverso · área privada</title>
+<script>
+  /* antes de pintar: si no hay elección guardada, se sigue al sistema */
+  (function(){
+    var t = localStorage.getItem('trad.tema') || 'oscuro';   /* Tradinverso nace oscuro */
+    document.documentElement.setAttribute('data-tema', t);
+  })();
+</script>
+<style>
+  /* Las mismas de la landing de Tradinverso, servidas desde aquí */
+  @font-face{font-family:'Switzer';src:url('assets/fonts/switzer-400.woff2') format('woff2');font-weight:400;font-display:swap}
+  @font-face{font-family:'Switzer';src:url('assets/fonts/switzer-500.woff2') format('woff2');font-weight:500;font-display:swap}
+  @font-face{font-family:'Switzer';src:url('assets/fonts/switzer-600.woff2') format('woff2');font-weight:600;font-display:swap}
+  @font-face{font-family:'Switzer';src:url('assets/fonts/switzer-700.woff2') format('woff2');font-weight:700;font-display:swap}
+  @font-face{font-family:'Zodiak';src:url('assets/fonts/zodiak-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+</style>
+<style>
+/* ══════════════════════════════════════════════════════════════
+   SISTEMA DE ESTILO · TRADINVERSO
+   Negro azulado y azul eléctrico, como la landing. Switzer para todo
+   y Zodiak en cursiva para los acentos. Nace en oscuro.
+   ══════════════════════════════════════════════════════════════ */
+:root{
+  color-scheme:dark;
+  --papel:#07090E;               /* el negro de la landing, con su punto de azul */
+  --papel-2:#05070C;             /* más profundo, como las bandas de sección */
+  --tinta:#FFFFFF;               /* blanco puro = jerarquía 1, sin excepciones */
+  --tinta-2:#AEB9D1;             /* el gris azulado de los párrafos largos */
+  --tenue:#8FA2CC;               /* metadatos y pies de foto */
+  --filete:rgba(140,175,255,.16);/* el borde canónico de la marca */
+  --acento:#8DB4FF;              /* el azul del texto resaltado y de las cursivas */
+  --acento-fuerte:#4D8DFF;       /* el del logotipo y los botones */
+  --acento-cl:#A9C7FF;
+  --vers:#6EA3FF;                /* versalitas y antetítulos */
+  --exito:#5FE3A1;               /* verde: validado, dinero, resultado */
+
+  /* el bloque · notas, cabeceras de tabla y cajas de los diagramas */
+  --bloque:#0E1622;
+  --sobre-bloque:#EEF2FB;
+  --sobre-bloque-fuerte:#FFFFFF;
+  --acento-bloque:#8DB4FF;
+
+  --serif:'Switzer',-apple-system,'Helvetica Neue',sans-serif;
+  --sans:'Switzer',-apple-system,'Helvetica Neue',sans-serif;
+  --italica:'Zodiak',Georgia,serif;
+  --ancho:1180px;
+}
+
+/* ── claro ── para leer de día y para imprimir. El azul se oscurece
+   para que aguante sobre blanco. */
+:root[data-tema="claro"]{
+  color-scheme:light;
+  --papel:#FFFFFF;
+  --papel-2:#F3F6FB;
+  --tinta:#07090E;
+  --tinta-2:#3B4658;
+  --tenue:#6B7794;
+  --filete:#DDE4F0;
+  --acento:#1F5BD6;              /* sobre blanco el azul claro no aguanta */
+  --acento-fuerte:#0A2F9E;
+  --acento-cl:#4D8DFF;
+  --vers:#2F6BFF;
+  --exito:#0E8A57;
+  --bloque:#07090E;
+  --sobre-bloque:#EEF2FB;
+  --sobre-bloque-fuerte:#FFFFFF;
+  --acento-bloque:#8DB4FF;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{
+  background:var(--papel);color:var(--tinta);
+  font-family:var(--sans);font-size:15px;line-height:1.62;font-weight:400;
+}
+::selection{background:var(--acento);color:var(--papel)}
+
+.serif{font-family:var(--serif);font-weight:600}
+
+/* Titulares en Switzer con peso; los acentos en cursiva, en Zodiak */
+.puerta-cuerpo h1,.encabezado h2,.ficha h3,.barra .marca .txt .n,
+.lector-barra .tit,#visor .tit,.doc h1,.doc h2,.doc .entradilla,
+.doc .cita,.doc .regla,.doc .qa .q,.doc .cifrona .v,.doc .cifras .v,
+.doc .frases .f,.doc .pasos .n,.doc .parte .num,.doc td.n,.doc td.r,
+.doc td.cifra-fila,.doc .respiro::after,.retrato .mono,.barra .marca .mini span,
+.vacio,.estudio h1{font-weight:600;letter-spacing:-.015em}
+
+em,.doc em,.puerta-cuerpo h1 em,.encabezado h2 em,.doc h1 em,.doc h2 em,
+.doc .cita em,.doc .qa .q,.doc .frases .f{
+  font-family:var(--italica);font-style:italic;font-weight:400;letter-spacing:0}
+.vers{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--tenue);font-weight:600}
+.vers.ac{color:var(--vers)}
+.filete{height:1px;background:var(--filete);border:0}
+
+/* ─────────────── PUERTA ─────────────── */
+#puerta{
+  position:fixed;inset:0;z-index:100;background:var(--papel);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 24px;transition:opacity .6s ease,visibility .6s;
+}
+#puerta.fuera{opacity:0;visibility:hidden}
+
+.retrato{
+  width:132px;height:132px;border-radius:50%;overflow:hidden;
+  background:var(--papel-2);border:1px solid var(--filete);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:34px;flex:none;position:relative;
+}
+.retrato img{width:100%;height:100%;object-fit:cover;display:block}
+.retrato .mono{font-family:var(--serif);font-size:44px;color:var(--tenue)}
+
+.puerta-cuerpo{max-width:620px;width:100%;text-align:center}
+.puerta-cuerpo .eyebrow{margin-bottom:22px}
+.puerta-cuerpo h1{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(30px,4.6vw,52px);line-height:1.12;letter-spacing:-.012em;
+  margin-bottom:20px;
+}
+.puerta-cuerpo h1 em{font-style:italic;color:var(--acento)}
+.puerta-cuerpo .handle{
+  font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--tenue);
+  margin-bottom:40px;
+}
+
+.llave{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.campo{position:relative;width:100%;max-width:330px}
+.campo input{
+  width:100%;background:transparent;border:0;border-bottom:1px solid var(--filete);
+  font-family:var(--sans);font-size:15px;color:var(--tinta);
+  padding:11px 2px;text-align:center;letter-spacing:.34em;outline:none;
+  transition:border-color .3s;
+}
+.campo input:focus{border-bottom-color:var(--acento)}
+.campo input::placeholder{letter-spacing:.16em;color:var(--tenue);font-size:12px;text-transform:uppercase}
+
+.btn{
+  font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  font-weight:500;background:var(--tinta);color:var(--papel);
+  border:0;padding:13px 34px;cursor:pointer;transition:background .25s;
+}
+.btn{background:linear-gradient(180deg,#2f6bff,#0a2f9e);color:#fff;box-shadow:0 0 22px 0 rgba(59,130,246,.45)}
+.btn:hover{box-shadow:0 0 34px 2px rgba(59,130,246,.6)}
+.btn:disabled{opacity:.35;cursor:default}
+.btn.fantasma{background:transparent;color:var(--tenue);border:1px solid var(--filete);padding:9px 20px}
+.btn.fantasma:hover{color:var(--acento);border-color:var(--acento);background:transparent}
+
+/* ── interruptor de luz ── */
+.tema{background:transparent;border:1px solid var(--filete);color:var(--tenue);
+  width:34px;height:34px;padding:0;flex:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:color .25s,border-color .25s}
+.tema:hover{color:var(--acento);border-color:var(--acento)}
+.tema svg{width:15px;height:15px;display:block}
+.puerta-tema{position:absolute;top:26px;right:26px}
+
+.aviso{font-size:12px;color:var(--acento);min-height:18px;letter-spacing:.02em}
+.recordar{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--tenue);
+  letter-spacing:.08em;text-transform:uppercase;cursor:pointer;user-select:none}
+.recordar input{accent-color:var(--acento);cursor:pointer}
+
+.puerta-pie{
+  position:absolute;bottom:30px;left:0;right:0;text-align:center;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--tenue);
+}
+
+/* ─────────────── PANEL ─────────────── */
+#panel{display:none;min-height:100vh;flex-direction:column}
+#panel.vivo{display:flex}
+
+.barra{
+  border-bottom:1px solid var(--filete);
+  padding:20px 40px;display:flex;align-items:center;gap:26px;
+  position:sticky;top:0;background:var(--papel);z-index:20;
+}
+.barra .marca{display:flex;align-items:center;gap:13px;flex:none}
+.barra .marca .mini{
+  width:34px;height:34px;border-radius:50%;overflow:hidden;background:var(--papel-2);
+  border:1px solid var(--filete);display:flex;align-items:center;justify-content:center;
+}
+.barra .marca .mini img{width:100%;height:100%;object-fit:cover}
+.barra .marca .mini span{font-family:var(--serif);font-size:15px;color:var(--tenue)}
+.barra .marca .txt .n{font-family:var(--serif);font-size:17px;line-height:1.1}
+.barra .marca .txt .h{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--tenue)}
+
+.buscador{flex:1;position:relative;max-width:520px}
+.buscador input{
+  width:100%;background:transparent;border:0;border-bottom:1px solid var(--filete);
+  font-family:var(--sans);font-size:14px;color:var(--tinta);padding:9px 2px 9px 24px;outline:none;
+  transition:border-color .3s;
+}
+.buscador input:focus{border-bottom-color:var(--acento)}
+.buscador input::placeholder{color:var(--tenue)}
+.buscador .lupa{position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:13px;height:13px;opacity:.42;pointer-events:none}
+.conteo{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);flex:none}
+
+.encabezado{padding:66px 40px 34px;max-width:var(--ancho);margin:0 auto;width:100%}
+.encabezado h2{font-family:var(--serif);font-size:clamp(34px,4.4vw,54px);line-height:1.08;
+  letter-spacing:-.014em;margin:14px 0 16px}
+.encabezado h2 em{font-style:italic;color:var(--acento)}
+.encabezado p{color:var(--tinta-2);max-width:600px;font-size:15px}
+
+.rejilla{
+  max-width:var(--ancho);margin:0 auto;width:100%;padding:0 40px 90px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:0;
+  border-top:1px solid var(--filete);
+}
+.ficha{
+  padding:34px 36px 36px 0;border-bottom:1px solid var(--filete);margin-right:36px;
+  cursor:pointer;transition:opacity .3s;position:relative;display:flex;flex-direction:column;
+}
+.ficha:hover{opacity:.62}
+.ficha::after{content:'';position:absolute;right:0;bottom:36px;
+  font-family:var(--serif);font-size:15px;color:var(--acento)}
+.ficha .num{font-family:var(--serif);font-size:15px;color:var(--acento-fuerte);margin-bottom:16px;letter-spacing:.05em}
+.ficha h3{font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.1;
+  letter-spacing:-.01em;margin-bottom:11px}
+.ficha .resumen{color:var(--tinta-2);font-size:14px;margin-bottom:18px;flex:1}
+.ficha .cuando{border-top:1px solid var(--filete);padding-top:13px;font-size:13px;color:var(--tinta-2)}
+.ficha .cuando b{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--tenue);
+  display:block;margin-bottom:4px;font-weight:500}
+.ficha .etiquetas{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px}
+.etq{font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--tenue);
+  border:1px solid var(--filete);padding:3px 9px;border-radius:2px}
+.etq.estado{color:var(--exito);border-color:var(--exito)}
+/* fecha y novedad en la ficha */
+.ficha .meta{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ficha .fecha{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);font-weight:500}
+.etq.nuevo{color:var(--exito);border-color:var(--exito);font-weight:600}
+
+/* resultados de buscar dentro de los documentos */
+.dentro{max-width:var(--ancho);margin:0 auto;width:100%;padding:0 40px 70px}
+.dentro-cab{padding:46px 0 6px;border-top:1px solid var(--filete)}
+.dentro-cab h3{font-family:var(--serif);font-weight:600;font-size:26px;letter-spacing:-.015em;margin:10px 0 6px}
+.dentro-cab p{color:var(--tinta-2);font-size:14px;max-width:600px}
+.hallazgo{border-bottom:1px solid var(--filete);padding:20px 0;cursor:pointer;transition:opacity .25s}
+.hallazgo:hover{opacity:.65}
+.hallazgo .de{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:9px}
+.hallazgo .de b{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--tinta)}
+.hallazgo .de span{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--tenue)}
+.hallazgo .paso{color:var(--tinta-2);font-size:14px;line-height:1.7;margin-bottom:5px;padding-left:16px;
+  border-left:1px solid var(--filete)}
+.hallazgo mark{background:transparent;color:var(--acento);font-weight:600}
+.buscando{padding:40px 0;color:var(--tenue);font-family:var(--italica);font-style:italic;font-size:19px}
+
+/* ── categorías ── */
+.grupo{max-width:var(--ancho);margin:0 auto;width:100%;padding:0 40px}
+.grupo-cab{padding:52px 0 22px;border-top:1px solid var(--filete)}
+.grupo:first-of-type .grupo-cab{border-top:0;padding-top:14px}
+.grupo-cab h3{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.1;
+  letter-spacing:-.015em;margin:10px 0 9px;color:var(--tinta)}
+.grupo-cab p{color:var(--tinta-2);max-width:600px;font-size:14.5px;line-height:1.65}
+.grupo-cab .cuenta{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--tenue);font-weight:600;margin-top:12px;display:block}
+.grupo .rejilla{padding:0 0 10px;border-top:0}
+
+.vacio{grid-column:1/-1;padding:80px 30px;text-align:center;color:var(--tenue);
+  font-family:var(--serif);font-size:22px;border-bottom:1px solid var(--filete)}
+
+/* ─────────────── VISOR DE PDF ─────────────── */
+#visor{display:none;position:fixed;inset:0;z-index:80;background:var(--papel);
+  flex-direction:column}
+#visor.vivo{display:flex}
+#visor .visor-barra{border-bottom:1px solid var(--filete);padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex:none}
+#visor .tit{font-family:var(--serif);font-size:18px}
+#visor .tit span{font-family:var(--sans);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--tenue);margin-left:12px}
+#visor .acciones{display:flex;gap:9px}
+#visor .marco{flex:1;background:var(--papel-2);border-top:1px solid var(--filete);
+  display:flex;justify-content:center;overflow:auto}
+#visor iframe{width:900px;flex:none;height:100%;border:0;background:var(--papel-2);
+  transition:width .18s ease}
+
+/* mando del zoom · el PDF se ajusta al ancho del marco, así que
+   cambiar el ancho ES el zoom, y no hay que recargar nada */
+.zoom{display:flex;align-items:center;gap:2px;border:1px solid var(--filete);flex:none}
+.zoom button{background:transparent;border:0;color:var(--tenue);cursor:pointer;
+  font-family:var(--sans);font-size:15px;line-height:1;width:30px;height:32px;
+  display:flex;align-items:center;justify-content:center;transition:color .2s}
+.zoom button:hover{color:var(--acento)}
+.zoom .valor{font-size:10px;letter-spacing:.12em;color:var(--tenue);min-width:46px;
+  text-align:center;cursor:pointer;user-select:none;font-weight:500}
+.zoom .valor:hover{color:var(--acento)}
+
+.etq.pdf{color:var(--acento);border-color:var(--acento)}
+
+/* ─────────────── LECTOR ─────────────── */
+#lector{display:none;position:fixed;inset:0;z-index:60;background:var(--papel);overflow-y:auto}
+#lector.vivo{display:block}
+.lector-barra{
+  position:sticky;top:0;background:var(--papel);border-bottom:1px solid var(--filete);
+  padding:16px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px;z-index:10;
+}
+.lector-barra .tit{font-family:var(--serif);font-size:18px}
+.lector-barra .acciones{display:flex;gap:9px}
+.lector-cuerpo{max-width:900px;margin:0 auto;padding:56px 40px 120px}
+
+/* ─────────────── DOCUMENTO ───────────────
+   Vocabulario completo de piezas. Los fragmentos de fuentes/ usan
+   estas clases y nada más: no traen estilos propios.
+   ────────────────────────────────────────────────────────────── */
+.doc{font-size:15.5px;line-height:1.68}
+.doc h1{font-family:var(--serif);font-weight:400;font-size:clamp(40px,5.6vw,68px);
+  line-height:1.02;letter-spacing:-.02em;margin:0 0 20px}
+.doc h1 em{font-style:italic;color:var(--acento)}
+.doc h2{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1.14;
+  letter-spacing:-.012em;margin:54px 0 8px}
+.doc h2:first-child{margin-top:0}
+.doc h3{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--vers);
+  font-weight:600;margin:34px 0 10px}
+.doc h4{font-size:15px;font-weight:600;margin:22px 0 5px}
+.doc p{margin:0 0 13px;color:var(--tinta-2)}
+.doc p strong,.doc li strong,.doc td strong,.doc div strong{color:var(--tinta);font-weight:600}
+.doc code{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.9em;color:var(--acento)}
+.doc .mini{font-size:13.5px;color:var(--tenue);line-height:1.55}
+
+/* etiqueta de capítulo */
+.doc .kicker{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--acento);
+  font-weight:600;margin:54px 0 0}
+.doc .kicker + h2{margin-top:6px}
+.doc .rule{height:1px;background:var(--filete);border:0;margin:14px 0 22px}
+
+.doc .entradilla{font-family:var(--serif);font-size:22px;line-height:1.44;color:var(--tinta);margin-bottom:26px}
+
+/* divisor de parte */
+.doc .parte{margin:86px 0 46px;padding-top:34px;border-top:1px solid var(--tinta)}
+.doc .parte .num{font-family:var(--serif);font-size:76px;line-height:.82;color:var(--acento);opacity:.24;display:block}
+.doc .parte h2{font-size:42px;margin:6px 0 12px}
+.doc .parte p{font-size:16.5px;max-width:560px}
+
+/* citas y reglas */
+.doc .cita{font-family:var(--serif);font-size:26px;line-height:1.32;color:var(--tinta);
+  border-left:2px solid var(--acento);padding:4px 0 4px 22px;margin:28px 0}
+.doc .cita em{font-style:italic;color:var(--acento)}
+.doc .regla{border:1px solid var(--acento);padding:16px 22px;margin:24px 0;
+  font-family:var(--serif);font-size:19px;line-height:1.34}
+
+/* nota · bloque negro, como en los documentos impresos */
+.doc .nota{background:var(--bloque);color:var(--sobre-bloque);padding:22px 26px;margin:24px 0}
+.doc .nota .k{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--acento-bloque);
+  display:block;margin-bottom:9px;font-weight:600}
+.doc .nota strong{color:var(--sobre-bloque-fuerte)}
+.doc .nota code{color:var(--acento-bloque)}
+.doc .nota .hip{background:transparent;border-color:var(--acento-bloque);color:var(--acento-bloque)}
+.doc .nota.suave{background:var(--papel-2);color:var(--tinta-2);border-left:2px solid var(--acento)}
+.doc .nota.suave .k{color:var(--acento)}
+.doc .nota.suave strong{color:var(--tinta)}
+.doc .nota.suave code{color:var(--acento)}
+
+/* pregunta y respuesta */
+.doc .qa{margin:24px 0}
+.doc .qa .q{font-family:var(--serif);font-size:21px;font-style:italic;color:var(--tinta);margin-bottom:7px}
+.doc .qa .a{color:var(--tinta-2);padding-left:20px;border-left:1px solid var(--filete)}
+
+/* cifras */
+.doc .cifrona{display:flex;align-items:baseline;gap:26px;margin:28px 0;flex-wrap:wrap}
+.doc .cifrona .v{font-family:var(--serif);font-size:96px;line-height:.84;color:var(--acento);flex:none}
+.doc .cifrona .t{font-size:15px;line-height:1.55;color:var(--tinta-2);max-width:440px}
+.doc .cifrona .t b{display:block;font-size:15.5px;color:var(--tinta);margin-bottom:5px}
+.doc .cifras{display:flex;flex-wrap:wrap;margin:24px 0;border-top:2px solid var(--tinta);
+  border-bottom:1px solid var(--filete)}
+.doc .cifras > div{flex:1;min-width:120px;padding:16px 20px 17px 0}
+.doc .cifras .v{font-family:var(--serif);font-size:40px;line-height:1;color:var(--acento)}
+.doc .cifras .e{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--tenue);
+  margin-top:6px;font-weight:600}
+
+/* enfrentamiento */
+.doc .duelo{display:grid;grid-template-columns:1fr 1fr;margin:24px 0;border-top:2px solid var(--tinta)}
+.doc .duelo > div{padding:16px 24px 18px 0}
+.doc .duelo > div:last-child{padding-left:24px;border-left:1px solid var(--filete)}
+.doc .duelo .h{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;
+  margin-bottom:10px;color:var(--acento)}
+.doc .duelo ul{list-style:none;padding:0;font-size:14.5px}
+.doc .duelo li{padding-left:18px;position:relative;margin-bottom:6px}
+.doc .duelo .no li::before,.doc .duelo .si li::before{position:absolute;left:0;color:var(--tenue)}
+.doc .duelo .no li::before{content:'✕'}
+.doc .duelo .si li::before{content:'✓'}
+
+/* frases sueltas */
+.doc .frases{margin:24px 0}
+.doc .frases .f{font-family:var(--serif);font-size:18px;font-style:italic;line-height:1.45;
+  color:var(--tinta);padding:7px 0 7px 20px;border-left:1px solid var(--filete)}
+.doc .frases .f span{display:block;font-family:var(--sans);font-style:normal;font-size:9.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--tenue);margin-top:6px;font-weight:600}
+
+/* pasos numerados */
+.doc .pasos{margin:22px 0}
+.doc .pasos > div{display:flex;gap:18px;margin-bottom:14px}
+.doc .pasos .n{font-family:var(--serif);font-size:32px;line-height:.9;color:var(--acento);width:34px;flex:none}
+.doc .pasos b{font-size:15.5px}
+
+/* casillas */
+.doc .check{margin:22px 0}
+.doc .check > div{display:flex;gap:13px;align-items:flex-start;margin-bottom:11px;color:var(--tinta-2)}
+.doc .check i{width:13px;height:13px;border:1.2px solid var(--tinta);flex:none;margin-top:5px}
+
+/* respiro */
+.doc .respiro{height:1px;background:var(--filete);margin:38px 0;position:relative;border:0}
+.doc .respiro::after{content:'§';position:absolute;left:50%;top:-11px;transform:translateX(-50%);
+  background:var(--papel);padding:0 14px;color:var(--acento);font-family:var(--serif);font-size:16px}
+
+/* rejillas y marcos */
+.doc .marco{border:1px solid var(--filete);padding:18px 22px}
+.doc .marco .k{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--acento);
+  font-weight:600;display:block;margin-bottom:7px}
+.doc .g2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:24px 0}
+.doc .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin:24px 0}
+
+/* listas */
+.doc ul{margin:10px 0 16px;padding-left:19px;color:var(--tinta-2)}
+.doc li{margin-bottom:5px}
+.doc li::marker{color:var(--acento)}
+
+/* bloques de código y esquemas */
+.doc pre{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:13px;line-height:1.62;
+  background:var(--papel-2);border-left:2px solid var(--acento);padding:18px 22px;margin:24px 0;
+  overflow-x:auto;color:var(--tinta-2);white-space:pre}
+.doc pre b{color:var(--tinta)}
+
+/* tablas · cabecera en negro pleno */
+.doc .tabla-scroll{overflow-x:auto;margin:24px 0}
+.doc table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px}
+.doc .tabla-scroll table{margin:0;min-width:560px}
+.doc th{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;background:var(--bloque);
+  color:var(--sobre-bloque);font-weight:600;text-align:left;padding:9px 14px}
+.doc td{padding:12px 14px 12px 0;border-bottom:1px solid var(--filete);
+  vertical-align:top;color:var(--tinta-2)}
+.doc td:first-child{padding-left:14px}
+.doc td b{color:var(--tinta)}
+.doc td.n,.doc td.r{font-family:var(--serif);font-size:22px;color:var(--acento);
+  text-align:right;padding-right:14px}
+.doc tr.d td,.doc tr.dest td{background:var(--papel-2)}
+
+/* celdas especiales */
+.doc td.cifra-fila{font-family:var(--serif);font-size:21px;color:var(--acento);
+  text-align:left;padding-left:14px;padding-right:14px}
+.doc td.veredicto{text-align:right;color:var(--acento);font-weight:600}
+
+/* marcas de hipótesis y ejemplo */
+.doc .hip{display:inline-block;background:var(--papel-2);border:1px solid var(--acento);
+  font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--acento);
+  padding:2px 8px;font-weight:600;vertical-align:middle}
+
+/* figuras y diagramas */
+.doc figure{margin:30px 0}
+.doc figure img{width:100%;display:block;border:1px solid var(--filete)}
+.doc figcaption{font-size:12.5px;color:var(--tenue);margin-top:10px;line-height:1.5}
+.doc svg{width:100%;height:auto;display:block;max-width:620px}
+.doc .cargando{color:var(--tenue);font-family:var(--italica);font-style:italic;font-size:19px}
+.doc .pie{font-size:12.5px;color:var(--tenue);margin-top:64px;padding-top:20px;border-top:1px solid var(--filete)}
+
+@media(max-width:820px){
+  .barra{padding:16px 20px;flex-wrap:wrap;gap:14px}
+  .encabezado,.rejilla{padding-left:20px;padding-right:20px}
+  .rejilla{grid-template-columns:1fr}
+  .ficha{border-right:0}
+  .lector-barra,.lector-cuerpo{padding-left:20px;padding-right:20px}
+  .doc .g2,.doc .g3,.doc .duelo{grid-template-columns:1fr}
+  .doc .duelo > div:last-child{padding-left:0;border-left:0;border-top:1px solid var(--filete)}
+  .doc .cifrona .v{font-size:66px}
+  .doc .parte .num{font-size:56px}
+  .doc pre{font-size:11.5px}
+}
+@media print{
+  :root,:root[data-tema="oscuro"]{
+    --papel:#FFFFFF; --papel-2:#F7F5F0; --tinta:#111111; --tinta-2:#3D3A35;
+    --tenue:#8B8781; --filete:#DFDAD0; --acento:#8A6A22; --acento-cl:#B08D3F;
+    --bloque:#111111; --sobre-bloque:#EDE9E1; --acento-bloque:#B08D3F;
+  }
+  .barra,.lector-barra,#puerta,.tema{display:none!important}
+  .lector-cuerpo{padding:0;max-width:none}
+  body{background:#fff}
+  .doc .nota:not(.suave){background:#111!important;color:#EDE9E1!important}
+  .doc .nota.suave{background:#F7F5F0!important;color:#3D3A35!important}
+  .doc th{background:#111!important;color:#EDE9E1!important}
+  .doc svg{color:#111}
+  .doc .nota,.doc .nota.suave,.doc th,.doc pre,.doc tr.d td,.doc .hip{
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .doc .nota,.doc .regla,.doc .duelo,.doc .cifrona,.doc pre,.doc table{break-inside:avoid}
+  .doc .parte{page-break-before:always}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ PUERTA ══════════════ -->
+<div id="puerta">
+  <button class="tema puerta-tema" type="button" title="Claro / oscuro" aria-label="Cambiar entre claro y oscuro">
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M10 2 A8 8 0 0 1 10 18 Z" fill="currentColor"/>
+    </svg>
+  </button>
+
+  <div class="retrato">
+    <img src="assets/avatar.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="mono" style="display:none">T</div>
+  </div>
+
+  <div class="puerta-cuerpo">
+    <div class="vers ac eyebrow">Área privada</div>
+    <h1>Todo el sistema de Tradinverso, <em>escrito</em></h1>
+    <div class="handle">David Rosell · Tradinverso</div>
+
+    <form class="llave" id="form">
+      <div class="campo">
+        <input type="password" id="clave" placeholder="Contraseña" autocomplete="current-password"
+               spellcheck="false" autocapitalize="off" autocorrect="off">
+      </div>
+      <label class="recordar"><input type="checkbox" id="recordar"> Recordar en este dispositivo</label>
+      <button class="btn" type="submit" id="entrar">Entrar</button>
+      <div class="aviso" id="aviso"></div>
+    </form>
+  </div>
+
+  <div class="puerta-pie">Acceso restringido</div>
+</div>
+
+<!-- ══════════════ PANEL ══════════════ -->
+<div id="panel">
+  <div class="barra">
+    <div class="marca">
+      <div class="mini">
+        <img src="assets/avatar.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span style="display:none">T</span>
+      </div>
+      <div class="txt">
+        <div class="n">Tradinverso</div>
+        <div class="h">Biblioteca interna</div>
+      </div>
+    </div>
+    <div class="buscador">
+      <svg class="lupa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+      </svg>
+      <input type="search" id="buscar" placeholder="Buscar por nombre, tema, área o cuándo se usa…" spellcheck="false">
+    </div>
+    <a class="btn fantasma" id="ir-estudio" href="estudio.html" hidden>Añadir</a>
+    <div class="conteo" id="conteo"></div>
+    <button class="tema" type="button" title="Claro / oscuro" aria-label="Cambiar entre claro y oscuro">
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M10 2 A8 8 0 0 1 10 18 Z" fill="currentColor"/>
+      </svg>
+    </button>
+    <button class="btn fantasma" id="salir">Salir</button>
+  </div>
+
+  <div class="encabezado">
+    <div class="vers ac">El archivo</div>
+    <h2>Lo que hacemos y <em>por qué funciona</em></h2>
+    <p>Cada documento lleva de qué va, cuándo se usa y en qué estado está. Se abren aquí dentro,
+    se descargan en PDF y se pueden imprimir.</p>
+  </div>
+
+  <div id="rejilla"></div>
+  <div id="dentro" class="dentro"></div>
+</div>
+
+<!-- ══════════════ LECTOR ══════════════ -->
+<div id="lector">
+  <div class="lector-barra">
+    <div class="tit" id="lector-tit"></div>
+    <div class="acciones">
+      <button class="tema" type="button" title="Claro / oscuro" aria-label="Cambiar entre claro y oscuro">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M10 2 A8 8 0 0 1 10 18 Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <button class="btn fantasma" id="ver-pdf" hidden>Ver el PDF</button>
+      <button class="btn fantasma" id="bajar-pdf" hidden>Descargar</button>
+      <button class="btn fantasma" onclick="window.print()">Imprimir</button>
+      <button class="btn fantasma" id="cerrar-lector">Volver</button>
+    </div>
+  </div>
+  <div class="lector-cuerpo"><div class="doc" id="lector-doc"></div></div>
+</div>
+
+<!-- ══════════════ VISOR DE PDF ══════════════ -->
+<div id="visor">
+  <div class="visor-barra">
+    <div class="tit" id="visor-tit"></div>
+    <div class="acciones">
+      <button class="tema" type="button" title="Claro / oscuro" aria-label="Cambiar entre claro y oscuro">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M10 2 A8 8 0 0 1 10 18 Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <div class="zoom">
+        <button type="button" id="zoom-menos" title="Alejar" aria-label="Alejar">−</button>
+        <span class="valor" id="zoom-valor" title="Volver al tamaño normal">100%</span>
+        <button type="button" id="zoom-mas" title="Acercar" aria-label="Acercar">+</button>
+      </div>
+      <button class="btn fantasma" id="visor-pestana">Abrir aparte</button>
+      <button class="btn fantasma" id="visor-bajar">Descargar</button>
+      <button class="btn fantasma" id="visor-cerrar">Volver</button>
+    </div>
+  </div>
+  <div class="marco"><iframe id="visor-marco" title="Documento en PDF"></iframe></div>
+</div>
+
+<script>document.write('<scr'+'ipt src="contenido.js?v='+Date.now()+'"><\/scr'+'ipt>')</script>
+<script>
+/* ══════════════════════════════════════════════════════════════
+   Descifrado · AES-GCM 256 con clave derivada por PBKDF2-SHA256.
+   Sin la contraseña correcta el contenido no se puede leer: no es
+   una pantalla que se salte con F12, los bytes están cifrados.
+   ══════════════════════════════════════════════════════════════ */
+const $ = s => document.querySelector(s);
+let DATOS = null;
+let CLAVE = null;              /* la clave derivada, en memoria, mientras dure la sesión */
+const CACHE = new Map();       /* documentos ya descargados y descifrados */
+
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+async function derivar(clave, sal, iteraciones){
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(clave),
+    'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt:sal, iterations:iteraciones, hash:'SHA-256'},
+    base, {name:'AES-GCM', length:256}, false, ['decrypt']);
+}
+
+async function descifrar(clave){
+  if(!window.isSecureContext || !crypto.subtle) throw new Error('sin-cripto');
+  const p = window.PAYLOAD;
+  if(!p) throw new Error('sin-contenido');
+  const key = await derivar(clave, b64(p.sal), p.iteraciones);
+  const plano = await crypto.subtle.decrypt(
+    {name:'AES-GCM', iv:b64(p.iv)}, key, b64(p.datos));
+  CLAVE = key;                 /* la misma clave abre todos los documentos */
+  return JSON.parse(new TextDecoder().decode(plano));
+}
+
+/* Los documentos y sus PDF no viajan en el índice: cada uno vive cifrado
+   en d/<id>.json y se descarga la primera vez que se abre. Con veinte
+   documentos y sus PDF, meterlo todo junto serían más de 25 MB que habría
+   que bajar solo para pintar la portada. */
+/* El texto de todos los documentos, para buscar dentro. Se trae una sola
+   vez, la primera vez que se busca: son unos cientos de KB, no los 35 MB
+   de la biblioteca entera. */
+let TEXTOS = null, trayendoTextos = null;
+
+function traerTextos(){
+  if(TEXTOS) return Promise.resolve(TEXTOS);
+  if(trayendoTextos) return trayendoTextos;
+  trayendoTextos = (async ()=>{
+    await new Promise((ok, mal) => {
+      if(window.BUSQUEDA) return ok();
+      const sc = document.createElement('script');
+      sc.src = 'busqueda.js?v=' + Date.now();
+      sc.onload = ok; sc.onerror = () => mal(new Error('sin-indice'));
+      document.head.appendChild(sc);
+    });
+    const b = window.BUSQUEDA;
+    const plano2 = await crypto.subtle.decrypt(
+      {name:'AES-GCM', iv:b64(b.iv)}, CLAVE, b64(b.datos));
+    TEXTOS = JSON.parse(new TextDecoder().decode(plano2));
+    return TEXTOS;
+  })();
+  return trayendoTextos;
+}
+
+async function traerDoc(id){
+  if(CACHE.has(id)) return CACHE.get(id);
+  const r = await fetch('d/' + encodeURIComponent(id) + '.json');
+  if(!r.ok) throw new Error('no encuentro el documento');
+  const sobre = await r.json();
+  const plano = await crypto.subtle.decrypt(
+    {name:'AES-GCM', iv:b64(sobre.iv)}, CLAVE, b64(sobre.datos));
+  const cuerpo = JSON.parse(new TextDecoder().decode(plano));
+  CACHE.set(id, cuerpo);
+  return cuerpo;
+}
+
+/* El estudio solo existe en tu ordenador. En lo que se publica en
+   GitHub no hay servidor que pueda escribir nada, así que el botón
+   no aparece siquiera. */
+if(['localhost','127.0.0.1'].includes(location.hostname)) $('#ir-estudio').hidden = false;
+
+/* ── luz ── se guarda por dispositivo, no por sesión ── */
+document.querySelectorAll('.tema').forEach(b => b.addEventListener('click', () => {
+  const raiz = document.documentElement;
+  const nuevo = raiz.getAttribute('data-tema') === 'oscuro' ? 'claro' : 'oscuro';
+  raiz.setAttribute('data-tema', nuevo);
+  localStorage.setItem('trad.tema', nuevo);
+}));
+
+/* ── puerta ── */
+$('#form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const clave = $('#clave').value.trim();
+  const aviso = $('#aviso');
+  const btn = $('#entrar');
+  if(!clave) return;
+  btn.disabled = true; aviso.textContent = '';
+  try{
+    DATOS = await descifrar(clave);
+    if($('#recordar').checked) sessionStorage.setItem('trad.k', clave);
+    abrirPanel();
+  }catch(err){
+    const motivos = {
+      'sin-cripto':    'Ábrelo desde un servidor, no con doble clic en el fichero',
+      'sin-contenido': 'Falta contenido.js — genéralo con cifrar.mjs'
+    };
+    aviso.textContent = motivos[err.message] || 'Contraseña incorrecta';
+    $('#clave').value = '';
+    btn.disabled = false;
+  }
+});
+
+function abrirPanel(){
+  $('#puerta').classList.add('fuera');
+  $('#panel').classList.add('vivo');
+  pintar('');
+  setTimeout(()=> $('#buscar').focus(), 650);
+}
+
+$('#salir').addEventListener('click', ()=>{
+  soltarPdf();
+  CLAVE = null; CACHE.clear();
+  sessionStorage.removeItem('trad.k');
+  location.reload();
+});
+
+/* ── rejilla y buscador ── */
+$('#buscar').addEventListener('input', e => pintar(e.target.value));
+
+/* buscar "pixel" tiene que encontrar "Píxel": se quitan los acentos
+   de los dos lados antes de comparar */
+const MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+function fechaCorta(f){
+  const [a,m,d] = (f||'').split('-');
+  if(!a) return '';
+  return `${+d} ${MESES[+m-1]} ${a}`;
+}
+
+const plano = x => (x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+function pintar(q){
+  const t = plano(q.trim());
+  const casa = e => !t || plano([
+    e.nombre, e.resumen, e.cuando, e.estado, e.categoria, (e.etiquetas||[]).join(' ')
+  ].join(' ')).includes(t);
+
+  const lista = DATOS.estrategias.filter(casa);
+  $('#conteo').textContent = lista.length === DATOS.estrategias.length
+    ? `${lista.length} ${lista.length===1?'documento':'documentos'}`
+    : `${lista.length} de ${DATOS.estrategias.length}`;
+
+  const r = $('#rejilla');
+  if(!lista.length){
+    r.innerHTML = '<div class="grupo"><div class="rejilla"><div class="vacio">Nada con ese término.</div></div></div>';
+    return;
+  }
+
+  /* Agrupado por categorías. Al buscar, la categoría que se queda sin
+     nada desaparece entera en vez de dejar un hueco con su título. */
+  const cats = DATOS.categorias || [];
+  const sueltas = lista.filter(e => !cats.some(c => c.id === e.categoria));
+  const porFecha = (a,b) => (b.fecha||'').localeCompare(a.fecha||'');
+  const grupos = cats
+    .map(c => {
+      const docs = lista.filter(e => e.categoria === c.id).sort(porFecha);
+      /* el más reciente de la categoría, para distinguir entre versiones
+         que se repiten — dos auditorías del mismo sitio, por ejemplo */
+      const todos = DATOS.estrategias.filter(e => e.categoria === c.id).sort(porFecha);
+      return {...c, docs, reciente: todos.length > 1 ? todos[0].id : null};
+    })
+    .filter(g => g.docs.length);
+  if(sueltas.length) grupos.push({id:'otros', nombre:'Otros', descripcion:'', docs:sueltas.sort(porFecha), reciente:null});
+
+  r.innerHTML = grupos.map(g => `
+    <section class="grupo">
+      <div class="grupo-cab">
+        <h3>${g.nombre}</h3>
+        ${g.descripcion ? `<p>${g.descripcion}</p>` : ''}
+        <span class="cuenta">${g.docs.length} ${g.docs.length===1?'documento':'documentos'}</span>
+      </div>
+      <div class="rejilla">
+        ${g.docs.map(e => `
+          <article class="ficha" data-id="${e.id}">
+            <div class="meta">
+              <span class="num">${e.numero}</span>
+              ${e.fecha ? `<span class="fecha">${fechaCorta(e.fecha)}</span>` : ''}
+              ${e.id === g.reciente ? '<span class="etq nuevo">Más reciente</span>' : ''}
+            </div>
+            <h3>${e.nombre}</h3>
+            <div class="resumen">${e.resumen}</div>
+            ${e.cuando ? `<div class="cuando"><b>Cuándo usarlo</b>${e.cuando}</div>` : ''}
+            <div class="etiquetas">
+              <span class="etq estado">${e.estado}</span>
+              ${e.tienePdf ? `<span class="etq pdf">PDF${e.pdfPaginas ? ' · ' + e.pdfPaginas + ' pág.' : ''}</span>` : ''}
+              ${(e.etiquetas||[]).map(x=>`<span class="etq">${x}</span>`).join('')}
+            </div>
+          </article>`).join('')}
+      </div>
+    </section>`).join('');
+
+  r.querySelectorAll('.ficha').forEach(f =>
+    f.addEventListener('click', ()=> abrirDoc(f.dataset.id)));
+
+  buscarDentro(q.trim());
+}
+
+/* ── buscar DENTRO de los documentos ──
+   No es un chat ni una IA: es búsqueda de texto sobre el contenido ya
+   descifrado, que para encontrar un dato entre veinticinco documentos
+   es más rápido y no se inventa nada. Devuelve el pasaje, no un resumen. */
+let ultimaBusqueda = 0;
+
+async function buscarDentro(q){
+  const caja = $('#dentro');
+  if(q.length < 3){ caja.innerHTML = ''; return; }
+  const mio = ++ultimaBusqueda;
+
+  caja.innerHTML = '<div class="dentro-cab"><h3>Dentro de los documentos</h3></div>' +
+                   '<div class="buscando">Buscando…</div>';
+  let textos;
+  try{ textos = await traerTextos(); }
+  catch{ caja.innerHTML = ''; return; }
+  if(mio !== ultimaBusqueda) return;
+
+  const t = plano(q);
+  const hallazgos = [];
+  for(const e of DATOS.estrategias){
+    const texto = textos[e.id];
+    if(!texto) continue;
+    const llano = plano(texto);
+    const pasajes = [];
+    let desde = 0, n = 0;
+    while(n < 3){
+      const i = llano.indexOf(t, desde);
+      if(i < 0) break;
+      const ini = Math.max(0, i - 90), fin = Math.min(texto.length, i + t.length + 130);
+      pasajes.push({ini, fin, i});
+      desde = i + t.length; n++;
+    }
+    if(pasajes.length){
+      const veces = llano.split(t).length - 1;
+      hallazgos.push({e, pasajes, veces, texto});
+    }
+  }
+  if(mio !== ultimaBusqueda) return;
+
+  if(!hallazgos.length){
+    caja.innerHTML = `<div class="dentro-cab"><h3>Dentro de los documentos</h3>
+      <p>Ningún documento menciona «${escapar(q)}».</p></div>`;
+    return;
+  }
+
+  hallazgos.sort((a,b)=> b.veces - a.veces);
+  caja.innerHTML = `
+    <div class="dentro-cab">
+      <h3>Dentro de los documentos</h3>
+      <p>«${escapar(q)}» aparece en ${hallazgos.length} ${hallazgos.length===1?'documento':'documentos'}.
+      Haz clic en cualquiera para abrirlo.</p>
+    </div>
+    ${hallazgos.map(h => `
+      <div class="hallazgo" data-id="${h.e.id}">
+        <div class="de"><b>${h.e.nombre}</b>
+          <span>${h.veces} ${h.veces===1?'mención':'menciones'}</span>
+          ${h.e.fecha ? `<span>${fechaCorta(h.e.fecha)}</span>` : ''}
+        </div>
+        ${h.pasajes.map(p => `<div class="paso">…${resaltar(h.texto.slice(p.ini, p.fin), q)}…</div>`).join('')}
+      </div>`).join('')}`;
+
+  caja.querySelectorAll('.hallazgo').forEach(x =>
+    x.addEventListener('click', ()=> abrirDoc(x.dataset.id)));
+}
+
+function escapar(x){
+  return String(x).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+
+function resaltar(trozo, q){
+  const llano = plano(trozo), t = plano(q);
+  let salida = '', desde = 0, i;
+  while((i = llano.indexOf(t, desde)) >= 0){
+    salida += escapar(trozo.slice(desde, i)) + '<mark>' + escapar(trozo.slice(i, i + t.length)) + '</mark>';
+    desde = i + t.length;
+  }
+  return salida + escapar(trozo.slice(desde));
+}
+
+
+/* ── lector ── */
+/* ══════════════════════════════════════════════════════════════
+   El PDF viaja DENTRO del cifrado, en base64. Nunca hay un fichero
+   suelto en el repositorio: si lo hubiera, cualquiera con la URL se
+   lo bajaría y el cifrado no serviría para nada.
+   Aquí se reconstruye en memoria y se sirve como blob.
+   ══════════════════════════════════════════════════════════════ */
+let PDF_URL = null, PDF_NOMBRE = null;
+let SOLO_PDF = false;   /* el documento abierto no tiene lectura, solo PDF */
+
+function soltarPdf(){
+  if(PDF_URL){ URL.revokeObjectURL(PDF_URL); PDF_URL = null; PDF_NOMBRE = null; }
+}
+
+function prepararPdf(e, cuerpo){
+  soltarPdf();
+  const hay = !!(cuerpo && cuerpo.pdf);
+  $('#ver-pdf').hidden = !hay;
+  $('#bajar-pdf').hidden = !hay;
+  if(!hay) return;
+  const bytes = b64(cuerpo.pdf);
+  PDF_URL = URL.createObjectURL(new Blob([bytes], {type:'application/pdf'}));
+  PDF_NOMBRE = e.pdfNombre || (e.id + '.pdf');
+  const bytesTotal = e.pdfPeso || bytes.length;
+  const peso = bytesTotal < 1024*1024
+    ? Math.round(bytesTotal/1024) + ' KB'
+    : Math.round(bytesTotal/1024/1024*10)/10 + ' MB';
+  $('#visor-tit').innerHTML = e.nombre + '<span>' +
+    (e.pdfPaginas ? e.pdfPaginas + ' páginas · ' : '') + peso + '</span>';
+  $('#ver-pdf').textContent = e.pdfPaginas ? `Ver el PDF · ${e.pdfPaginas} pág.` : 'Ver el PDF';
+}
+
+function bajarPdf(){
+  if(!PDF_URL) return;
+  const a = document.createElement('a');
+  a.href = PDF_URL; a.download = PDF_NOMBRE;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+/* toolbar=0 y navpanes=0 quitan la barra gris y el panel de miniaturas del
+   visor nativo del navegador: sin eso parece que te has salido de la biblioteca.
+   view=FitH lo ajusta al ancho. */
+$('#ver-pdf').addEventListener('click', ()=>{
+  if(!PDF_URL) return;
+  $('#visor-marco').src = PDF_URL + '#toolbar=0&navpanes=0&scrollbar=0&view=FitH';
+  $('#visor').classList.add('vivo');
+  /* el ancho con el que abre pasa a ser el 100%: es su tamaño normal */
+  ZOOM_BASE = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, Math.round(window.innerWidth * 0.72)));
+  zoom = ZOOM_BASE;
+  pintarZoom();
+});
+/* El PDF va con view=FitH: se ajusta al ancho del marco. Así que
+   el zoom es simplemente cambiar cuánto mide el marco. Sin recargar
+   el visor, sin perder por dónde ibas leyendo. */
+const ZOOM_MIN = 380, ZOOM_MAX = 2600;
+let ZOOM_BASE = 900, zoom = 900;
+
+function pintarZoom(){
+  $('#visor-marco').style.width = zoom + 'px';
+  $('#zoom-valor').textContent = Math.round(zoom / ZOOM_BASE * 100) + '%';
+}
+function ajustarZoom(paso){
+  zoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, Math.round(zoom * paso)));
+  pintarZoom();
+}
+$('#zoom-mas').addEventListener('click', ()=> ajustarZoom(1.2));
+$('#zoom-menos').addEventListener('click', ()=> ajustarZoom(1/1.2));
+$('#zoom-valor').addEventListener('click', ()=>{ zoom = ZOOM_BASE; pintarZoom(); });
+
+$('#visor-pestana').addEventListener('click', ()=>{
+  if(PDF_URL) window.open(PDF_URL, '_blank', 'noopener');
+});
+$('#bajar-pdf').addEventListener('click', bajarPdf);
+$('#visor-bajar').addEventListener('click', bajarPdf);
+function cerrarVisor(){
+  $('#visor').classList.remove('vivo');
+  $('#visor-marco').src = 'about:blank';
+  /* si detrás no hay nada que leer, se sale del todo */
+  if(SOLO_PDF) $('#cerrar-lector').click();
+}
+$('#visor-cerrar').addEventListener('click', cerrarVisor);
+
+
+async function abrirDoc(id){
+  const e = DATOS.estrategias.find(x => x.id === id);
+  if(!e) return;
+
+  SOLO_PDF = false;
+  $('#lector-tit').textContent = e.nombre;
+  $('#lector-doc').innerHTML = '<p class="cargando">Descifrando…</p>';
+  $('#ver-pdf').hidden = true; $('#bajar-pdf').hidden = true;
+  $('#lector').classList.add('vivo');
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0,0);
+  $('#lector').scrollTop = 0;
+
+  let cuerpo;
+  try{ cuerpo = await traerDoc(id); }
+  catch(err){
+    $('#lector-doc').innerHTML = '<p class="cargando">No se ha podido abrir: ' + err.message + '</p>';
+    return;
+  }
+
+  prepararPdf(e, cuerpo);
+
+  /* Si solo hay PDF y no hay documento escrito, no tiene sentido dejar
+     un lector vacío: se va directo al PDF. */
+  if(!cuerpo.documento && cuerpo.pdf){
+    /* Sin documento escrito no hay nada que leer detrás del PDF. Se marca
+       para que "Volver" cierre las dos capas de una vez, en vez de dejar
+       una pantalla vacía en medio. */
+    SOLO_PDF = true;
+    $('#lector-doc').innerHTML = '<p class="cargando">Este documento solo existe en PDF.</p>';
+    $('#ver-pdf').click();
+    return;
+  }
+  $('#lector-doc').innerHTML = cuerpo.documento || '<p>Documento todavía sin escribir.</p>';
+  $('#lector').scrollTop = 0;
+}
+$('#cerrar-lector').addEventListener('click', ()=>{
+  /* cerrar el lector cierra también el visor: nunca se queda un PDF
+     flotando encima de un panel al que ya has vuelto */
+  $('#visor').classList.remove('vivo');
+  $('#visor-marco').src = 'about:blank';
+  $('#lector').classList.remove('vivo');
+  document.body.style.overflow = '';
+  soltarPdf();
+  SOLO_PDF = false;
+  $('#ver-pdf').hidden = true; $('#bajar-pdf').hidden = true;
+});
+document.addEventListener('keydown', e => {
+  if($('#visor').classList.contains('vivo')){
+    if(e.key === 'Escape'){ cerrarVisor(); return; }
+    if(e.key === '+' || e.key === '='){ e.preventDefault(); ajustarZoom(1.2); return; }
+    if(e.key === '-'){ e.preventDefault(); ajustarZoom(1/1.2); return; }
+    if(e.key === '0'){ e.preventDefault(); zoom = ZOOM_BASE; pintarZoom(); return; }
+  }
+  if(e.key === 'Escape' && $('#lector').classList.contains('vivo')) $('#cerrar-lector').click();
+  if(e.key === '/' && $('#panel').classList.contains('vivo') && document.activeElement !== $('#buscar')){
+    e.preventDefault(); $('#buscar').focus();
+  }
+});
+
+/* ── sesión recordada ── */
+(async ()=>{
+  const k = sessionStorage.getItem('trad.k');
+  if(!k) return;
+  try{ DATOS = await descifrar(k); abrirPanel(); }
+  catch{ sessionStorage.removeItem('trad.k'); }
+})();
+</script>
+</body>
+</html>
