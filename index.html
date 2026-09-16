@@ -206,6 +206,36 @@ em,.doc em,.puerta-cuerpo h1 em,.encabezado h2 em,.doc h1 em,.doc h2 em,
 .encabezado h2 em{font-style:italic;color:var(--acento)}
 .encabezado p{color:var(--tinta-2);max-width:600px;font-size:15px}
 
+/* ── menú de categorías: saltar sin deslizar ── */
+.cats{
+  position:sticky;top:74px;z-index:19;background:var(--papel);
+  border-bottom:1px solid var(--filete);
+  padding:12px 40px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;
+}
+.cats::-webkit-scrollbar{display:none}
+.cats:empty{display:none}
+.cats .cat{
+  flex:none;cursor:pointer;font-family:var(--sans);font-size:12.5px;
+  display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+  padding:7px 14px;border-radius:999px;
+  background:transparent;border:1px solid var(--filete);color:var(--tinta-2);
+  transition:border-color .2s,color .2s,background .2s;
+}
+.cats .cat span{
+  font-size:10px;letter-spacing:.06em;color:var(--tenue);
+  background:var(--papel-2);border-radius:999px;padding:1px 6px;
+}
+.cats .cat:hover{border-color:var(--acento);color:var(--tinta)}
+.cats .cat:focus-visible{outline:2px solid var(--acento-fuerte);outline-offset:2px}
+.cats .cat.activa{border-color:var(--acento);color:var(--tinta);background:var(--papel-2)}
+.cats .cat.activa span{color:var(--acento)}
+/* al saltar, que el título no se esconda bajo la barra ni bajo el menú */
+.grupo{scroll-margin-top:120px}
+@media (max-width:640px){
+  .cats{padding:10px 20px;top:auto;position:static}
+  .grupo{scroll-margin-top:20px}
+}
+
 .rejilla{
   max-width:var(--ancho);margin:0 auto;width:100%;padding:0 40px 90px;
   display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:0;
@@ -560,6 +590,8 @@ em,.doc em,.puerta-cuerpo h1 em,.encabezado h2 em,.doc h1 em,.doc h2 em,
     se descargan en PDF y se pueden imprimir.</p>
   </div>
 
+  <nav class="cats" id="cats" aria-label="Categorías"></nav>
+
   <div id="rejilla"></div>
   <div id="dentro" class="dentro"></div>
 </div>
@@ -779,8 +811,10 @@ function pintar(q){
     .filter(g => g.docs.length);
   if(sueltas.length) grupos.push({id:'otros', nombre:'Otros', descripcion:'', docs:sueltas.sort(porFecha), reciente:null});
 
+  pintarCategorias(grupos);
+
   r.innerHTML = grupos.map(g => `
-    <section class="grupo">
+    <section class="grupo" id="cat-${g.id}">
       <div class="grupo-cab">
         <h3>${g.nombre}</h3>
         ${g.descripcion ? `<p>${g.descripcion}</p>` : ''}
@@ -810,6 +844,41 @@ function pintar(q){
     f.addEventListener('click', ()=> abrirDoc(f.dataset.id)));
 
   buscarDentro(q.trim());
+}
+
+/* ── el menú de categorías ──
+   Una píldora por categoría con lo que hay dentro. Al pulsarla salta a su
+   sección, para no tener que deslizar hasta encontrarla. Se repinta en cada
+   búsqueda: las categorías que se quedan sin nada tampoco salen aquí. */
+function pintarCategorias(grupos){
+  const nav = $('#cats');
+  if(!nav) return;
+  if(grupos.length < 2){ nav.innerHTML = ''; return; }
+
+  nav.innerHTML = grupos.map(g =>
+    `<button type="button" class="cat" data-ir="cat-${g.id}">${g.nombre}<span>${g.docs.length}</span></button>`
+  ).join('');
+
+  const suave = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  nav.querySelectorAll('.cat').forEach(b =>
+    b.addEventListener('click', () => {
+      const s = document.getElementById(b.dataset.ir);
+      if(s) s.scrollIntoView({behavior: suave ? 'smooth' : 'auto', block:'start'});
+    }));
+
+  /* marca la categoría que se está mirando */
+  if(window._obsCats) window._obsCats.disconnect();
+  window._obsCats = new IntersectionObserver(entradas => {
+    entradas.forEach(en => {
+      if(!en.isIntersecting) return;
+      nav.querySelectorAll('.cat').forEach(b =>
+        b.classList.toggle('activa', b.dataset.ir === en.target.id));
+    });
+  }, {rootMargin:'-120px 0px -70% 0px'});
+  grupos.forEach(g => {
+    const s = document.getElementById('cat-' + g.id);
+    if(s) window._obsCats.observe(s);
+  });
 }
 
 /* ── buscar DENTRO de los documentos ──
